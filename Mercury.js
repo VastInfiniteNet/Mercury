@@ -80,7 +80,7 @@ function startModules() {
 
 function getModule(path) {
     try {
-        return require('./tradeReader').mercury.instance
+        return require(path).mercury.instance
     } catch (error) {
         Chat.log(`Error requiring '${path}'`)
         return null
