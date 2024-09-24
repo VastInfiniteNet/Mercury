@@ -21,14 +21,21 @@ const BASE_COMMAND = 'mercury'
 let MERCURY_READER;
 let MERCURY_GRAPHER;
 let MERCURY_ANALYZER;
+let MERCURY_IECREATOR;
 let MERCURY_ARBITRAGER; 
+
+class MercuryModule {
+    Start() {} // starts any related listeners and GUI elements related to the module
+    Stop() {} // closes and cleans up any listeners and GUI elements related to the module
+    Help() {} // returns all help related info including usage and options info.
+}
 
 function helpSubcommandHandler() {
     let helpMessageBuilder = Chat.createTextBuilder()
     helpMessageBuilder.append("Usage: ").append("/mercury").withColor(196, 22, 22)
     helpMessageBuilder.append("\nhelp - prints out command usage and info about subcommands. VERY WIP - WILL ADD BETTER FORMATTING AND COLOR LATER.")
     if (!!MERCURY_READER)
-        helpMessageBuilder.append(`\nreader <start/stop> - ${MERCURY_READER.HelpMessage()}`)
+        helpMessageBuilder.append(`\nreader <start/stop> - ${MERCURY_READER.Help()}`)
     // print out a helpful chat message!
     // detail the subcommands available
 
@@ -40,14 +47,26 @@ function readerStartCommandHandler() {
         Chat.log("MERCURY_READER file missing!")
         return;
     }
-    MERCURY_READER.startTradeReader()
+    MERCURY_READER.Start()
 }
 
 function readerStopCommandHandler() {
-    MERCURY_READER.stopTradeReader()
+    MERCURY_READER.Stop()
 }
 
 function graphCommandHandler() {
+    Chat.log("NOT IMPLEMENTED")
+}
+
+function analyzerCommandHandler() {
+    Chat.log("NOT IMPLEMENTED")
+}
+
+function iecreatorCommandHandler() {
+    Chat.log("NOT IMPLEMENTED")
+}
+
+function arbitragerCommandHandler() {
     Chat.log("NOT IMPLEMENTED")
 }
 
@@ -82,7 +101,7 @@ function getModule(path) {
     try {
         return require(path).mercury.instance
     } catch (error) {
-        Chat.log(`Error requiring '${path}'`)
+        Chat.log(`Error finding module '${path}'`)
         return null
     }
 }

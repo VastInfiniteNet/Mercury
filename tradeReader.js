@@ -84,7 +84,7 @@ class TradeReader {
     /**
      * Starts an event listener for when the player receives a message to trigger a trade read.
      */
-    startTradeReader() {
+    Start() {
         if (!!this.messageListener) {
             Chat.log(`${this.name} already running...`)
             return
@@ -97,7 +97,7 @@ class TradeReader {
         this.messageListener = JsMacros.on('RecvMessage', JavaWrapper.methodToJava(TradeReader.HandleReader))
     }
 
-    stopTradeReader() {
+    Stop() {
         if (!!!this.messageListener)
             return
         JsMacros.off(this.messageListener)
