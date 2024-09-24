@@ -100,6 +100,10 @@ function cleanup() {
 
 function startModules() {
     MERCURY_READER = getModule('./tradeReader')
+    MERCURY_GRAPHER = getModule('./tradeGrapher')
+    MERCURY_ANALYZER = getModule('./tradeAnalyzer')
+    MERCURY_IECREATOR = getModule('./IECreator')
+    MERCURY_ARBITRAGER = getModule('./tradeArbitrager')
 }
 
 function getModule(path) {
