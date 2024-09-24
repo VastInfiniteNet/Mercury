@@ -24,18 +24,17 @@ let MERCURY_ANALYZER;
 let MERCURY_IECREATOR;
 let MERCURY_ARBITRAGER; 
 
-class MercuryModule {
+class MercuryModuleStub {
     Start() {} // starts any related listeners and GUI elements related to the module
     Stop() {} // closes and cleans up any listeners and GUI elements related to the module
-    Help() {} // returns all help related info including usage and options info.
+    Help() {return "MISSING MODULE"} // returns all help related info including usage and options info.
 }
 
 function helpSubcommandHandler() {
     let helpMessageBuilder = Chat.createTextBuilder()
     helpMessageBuilder.append("Usage: ").append("/mercury").withColor(196, 22, 22)
     helpMessageBuilder.append("\nhelp - prints out command usage and info about subcommands. VERY WIP - WILL ADD BETTER FORMATTING AND COLOR LATER.")
-    if (!!MERCURY_READER)
-        helpMessageBuilder.append(`\nreader <start/stop> - ${MERCURY_READER.Help()}`)
+    helpMessageBuilder.append(MERCURY_READER.Help())
     // print out a helpful chat message!
     // detail the subcommands available
 
@@ -80,7 +79,9 @@ function setup() {
             .literalArg('start').executes(JavaWrapper.methodToJava(readerStartCommandHandler)).otherwise(2)
             .literalArg('stop').executes(JavaWrapper.methodToJava(readerStopCommandHandler)).otherwise(1)
         .literalArg('graph').executes(JavaWrapper.methodToJava(graphCommandHandler)).otherwise(1)
-        .literalArg('iecreator')
+        .literalArg('analyzer').executes(JavaWrapper.methodToJava(analyzerCommandHandler)).otherwise(1)
+        .literalArg('iecreator').executes(JavaWrapper.methodToJava(iecreatorCommandHandler)).otherwise(1)
+        .literalArg('arbitrager').executes(JavaWrapper.methodToJava(arbitragerCommandHandler)).otherwise(1)
         .register()
 
     event.stopListener = JavaWrapper.methodToJava(cleanup)
@@ -90,7 +91,11 @@ function setup() {
 
 function cleanup() {
     Chat.getCommandManager().unregisterCommand(BASE_COMMAND)
-    MERCURY_READER.stopTradeReader()
+    MERCURY_READER.Stop()
+    MERCURY_GRAPHER.Stop()
+    MERCURY_ANALYZER.Stop()
+    MERCURY_IECREATOR.Stop()
+    MERCURY_ARBITRAGER.Stop()
 }
 
 function startModules() {
@@ -102,7 +107,7 @@ function getModule(path) {
         return require(path).mercury.instance
     } catch (error) {
         Chat.log(`Error finding module '${path}'`)
-        return null
+        return new MercuryModuleStub()
     }
 }
 setup()
